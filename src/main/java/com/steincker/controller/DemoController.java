@@ -13,7 +13,7 @@ public class DemoController {
     @GetMapping("/test")
     @ResponseBody
     public String loop() {
-        return "你好啊，这个是个web项目！";
+        return "你好啊，这个是个web项目！<br>这是改变的信息";
     }
 
 

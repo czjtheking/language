@@ -13,7 +13,7 @@ public class DemoController {
     @GetMapping("/test")
     @ResponseBody
     public String loop() {
-        return "你好啊，这个是个web项目！ 这是改变的信息测试自动构建";
+        return "你好啊，这个是个web项目！ 这是改变的信息测试自动构建234234234";
     }
 
 

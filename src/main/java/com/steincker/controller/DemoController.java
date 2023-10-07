@@ -17,14 +17,14 @@ public class DemoController {
     @ResponseBody
     public String loop() {
 
-       try {
-           Date.parse("111");
-       }catch (Exception e){
-
-       }
-       Random random = new Random();        // Noncompliant - new instance created with each invocation
-       int rValue = random.nextInt();
-      return "你好啊，这个是个web项目！ 我再次提交了代码！"+rValue;
+//       try {
+//           Date.parse("111");
+//       }catch (Exception e){
+//
+//       }
+//       Random random = new Random();        // Noncompliant - new instance created with each invocation
+//       int rValue = random.nextInt();
+      return "你好啊，这个是个web项目！ 我提交了代码！";
     }
 
 

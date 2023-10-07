@@ -20,7 +20,6 @@ public class DemoController {
        try {
            Date.parse("111");
        }catch (Exception e){
-            111
        }
        Random random = new Random();        // Noncompliant - new instance created with each invocation
        int rValue = random.nextInt();

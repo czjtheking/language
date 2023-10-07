@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.Random;
 
 @RestController
 @RequestMapping(value = "/demo")
@@ -21,7 +22,9 @@ public class DemoController {
        }catch (Exception e){
 
        }
-      return "你好啊，这个是个web项目！ 我再次提交了代码！";
+       Random random = new Random();        // Noncompliant - new instance created with each invocation
+       int rValue = random.nextInt();
+      return "你好啊，这个是个web项目！ 我再次提交了代码！"+rValue;
     }
 
 

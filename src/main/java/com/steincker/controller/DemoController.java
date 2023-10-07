@@ -16,13 +16,13 @@ public class DemoController {
     @GetMapping("/test")
     @ResponseBody
     public String loop() {
-//       try {
-//           Date.parse("111");
-//       }catch (Exception e){
-//       }
-//       Random random = new Random();        // Noncompliant - new instance created with each invocation
-//       int rValue = random.nextInt();
-      return "你好啊，这个是个演示的web项目！";
+       try {
+           Date.parse("111");
+       }catch (Exception e){
+       }
+       Random random = new Random();        // Noncompliant - new instance created with each invocation
+       int rValue = random.nextInt();
+      return "你好啊，这个是个演示的web项目1111111！";
     }
 
 

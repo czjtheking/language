@@ -22,6 +22,7 @@ public class DemoController {
        }
        Random random = new Random();        // Noncompliant - new instance created with each invocation
        int rValue = random.nextInt();
+       23432
       return "你好啊，这个是个演示的web项目1111111！";
     }
 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.steincker.dao.RegionLanguageMapper">
+    <!-- 实体映射 -->
+    <resultMap id="entity" type="com.steincker.entity.RegionLanguage">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <!-- 识别信息 -->
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="code_path" jdbcType="VARCHAR" property="codePath"/>
+        <!-- 语言信息 -->
+        <result column="lang" jdbcType="VARCHAR" property="lang"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="abbr" jdbcType="VARCHAR" property="abbr"/>
+        <result column="initial" jdbcType="VARCHAR" property="initial"/>
+        <!-- 通用信息 -->
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="deleted" jdbcType="BIGINT" property="deleted"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- 表、字段、查询 sql -->
+    <sql id="table">`energy_region_language`</sql>
+    <sql id="columns">
+        `id`, `type`, `code`, `code_path`, `lang`, `name`, `abbr`, `initial`,
+        `description`, `deleted`, `create_by`, `create_time`, `update_by`, `update_time`
+    </sql>
+    <sql id="selectEntity">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="table"/>
+    </sql>
+
+    <!-- 使用 id 获取实体信息 【默认包括逻辑删除】 -->
+    <select id="findById" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `id` = #{id, jdbcType=BIGINT}
+    </select>
+
+    <!-- 获取所有实体信息 【默认不包括逻辑删除】 -->
+    <select id="findAll" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `deleted` = 0
+    </select>
+
+    <!-- 使用 id 列表获取所有实体信息 【默认包括逻辑删除】 -->
+    <select id="findAllByIdIn" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `id` IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </select>
+</mapper>

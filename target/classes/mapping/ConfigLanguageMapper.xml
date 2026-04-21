@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.steincker.dao.ConfigLanguageMapper">
+    <!-- 实体映射 -->
+    <resultMap id="entity" type="com.steincker.entity.ConfigLanguage">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <!-- 识别信息 -->
+        <result column="app" jdbcType="VARCHAR" property="app"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <!-- 语言信息 -->
+        <result column="lang" jdbcType="VARCHAR" property="lang"/>
+        <result column="text" jdbcType="VARCHAR" property="text"/>
+        <!-- 通用信息 -->
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="deleted" jdbcType="BIGINT" property="deleted"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- 表、字段、查询 sql -->
+    <sql id="table">`energy_config_language`</sql>
+    <sql id="columns">
+        `id`, `app`, `type`, `code`,`lang`, `text`,
+        `description`, `deleted`, `create_by`, `create_time`, `update_by`, `update_time`
+    </sql>
+    <sql id="selectEntity">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="table"/>
+    </sql>
+
+    <!-- 使用 id 获取实体信息 【默认包括逻辑删除】 -->
+    <select id="findById" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `id` = #{id, jdbcType=BIGINT}
+    </select>
+
+    <!-- 获取所有实体信息 【默认不包括逻辑删除】 -->
+    <select id="findAll" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `deleted` = 0
+        order by `type` asc, code asc
+    </select>
+
+    <!-- 先执行 SET 语句 -->
+    <update id="setGroupConcatMaxLen">
+        SET SESSION group_concat_max_len = 16777216
+    </update>
+
+    <!-- 获取所有实体信息 【默认不包括逻辑删除】 -->
+    <select id="findAllGroupBy" resultMap="entity">
+        <!--SET SESSION group_concat_max_len = 8192;-->
+        SELECT
+        type,
+        code,
+        GROUP_CONCAT(DISTINCT lang ORDER BY lang SEPARATOR ',') AS lang,
+        GROUP_CONCAT(text ORDER BY lang SEPARATOR '|') AS text
+        FROM
+        energy_config_language
+        WHERE
+        deleted = 0
+        GROUP BY
+        type, code
+        ORDER BY
+        type, code asc;
+    </select>
+
+    <!-- 使用 id 列表获取所有实体信息 【默认包括逻辑删除】 -->
+    <select id="findAllByIdIn" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `id` IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </select>
+
+    <!-- 使用 app + type + lang 获取语言列表 【默认不包括逻辑删除】 -->
+    <select id="findAllByAppAndTypeAndLang" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `app` = #{app, jdbcType=VARCHAR}
+        AND `type` = #{type, jdbcType=VARCHAR}
+
+        AND `deleted` = 0
+        ORDER BY `id`
+    </select>
+
+    <!-- 使用 code + type + app + lang 获取语言 【默认包括逻辑删除】 -->
+    <select id="findByCodeAndTypeAndAppAndLang" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `code` = #{code, jdbcType=VARCHAR}
+        AND `type` = #{type, jdbcType=VARCHAR}
+        AND `app` = #{app, jdbcType=VARCHAR}
+        AND `lang` = #{lang, jdbcType=VARCHAR}
+    </select>
+
+    <!-- 使用 codes + type + app + lang 获取语言 【默认包括逻辑删除】 -->
+    <select id="findByCodeInAndTypeAndAppAndLang" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `code` IN
+        <foreach collection="codes" item="code" open="(" separator="," close=")">#{code, jdbcType=VARCHAR}</foreach>
+        AND `type` = #{type, jdbcType=VARCHAR}
+        AND `app` = #{app, jdbcType=VARCHAR}
+        AND `lang` = #{lang, jdbcType=VARCHAR}
+    </select>
+
+    <!-- 使用 types + app + lang 获取语言 【默认包括逻辑删除】 -->
+    <select id="findByTypeInAndAppAndLang" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `type` IN
+        <foreach collection="types" item="type" open="(" separator="," close=")">#{type, jdbcType=VARCHAR}</foreach>
+        AND `app` = #{app, jdbcType=VARCHAR}
+        AND `lang` = #{lang, jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据国际化text 模糊查询满足条件的code 列表 -->
+    <select id="listI18CodeByText" resultMap="entity">
+        <include refid="selectEntity"/>
+        WHERE `type` = #{type, jdbcType=VARCHAR}
+        AND `app` = #{app, jdbcType=VARCHAR}
+        AND `lang` = #{lang, jdbcType=VARCHAR}
+
+        <if test=" text != null and text != ''  ">
+            and text like concat('%',REPLACE(#{text,jdbcType=VARCHAR}, '%', '\\%'),'%')
+        </if>
+
+    </select>
+
+    <!--批量插入记录-->
+    <insert id="insertBatch">
+        insert into energy_config_language_test
+        (`app`, `type`, `code`,`lang`, `text`)
+        values
+        <foreach collection="list" item="item" open="" separator="," close="">
+            (#{item.app,jdbcType=VARCHAR},
+            #{item.type,jdbcType=VARCHAR},
+            #{item.code,jdbcType=VARCHAR},
+            #{item.lang,jdbcType=VARCHAR},
+            #{item.text,jdbcType=VARCHAR})
+        </foreach>
+
+    </insert>
+
+
+    <!-- 批量删除记录-->
+    <delete id="deleteBatch">
+        delete from energy_config_language_test WHERE
+        (`code`, `type`, `app`,`lang`, `deleted`)
+        in (
+        <foreach collection="list" item="item" open="" separator="," close="">
+            (#{item.code,jdbcType=VARCHAR},
+            #{item.type,jdbcType=VARCHAR},
+            #{item.app,jdbcType=VARCHAR},
+            #{item.lang,jdbcType=VARCHAR},
+            #{item.deleted,jdbcType=BIGINT})
+        </foreach>
+        )
+
+    </delete>
+
+    <!--获取告警模型点-->
+    <select id="listAlarmModelEvent"
+            resultType="com.steincker.entity.EnergyModelEvent">
+        SELECT
+        id, name, code, parent_code, type_code, product_id,
+        type, `group`, level, attr, cause, suggestion, description,
+        deleted, create_by, create_time, update_by, update_time
+        from energy_model_event e where 1=1
+
+
+    </select>
+
+</mapper>

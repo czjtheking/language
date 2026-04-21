@@ -1,0 +1,9 @@
+# 192.168.1.32:3306/test\u6539\u6210\u81EA\u5DF1\u7684\u6570\u636E\u5E93,username\u548Cpassword\u4E5F\u6539\u6210\u81EA\u5DF1\u7684
+spring.datasource.url=jdbc:mysql://172.18.120.92:3306/sys?useUnicode=true&characterEncoding=utf-8
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Drive
+spring.datasource.username=root
+spring.datasource.password=password
+spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+
+mybatis.type-aliases-package=com.steincker.entity
+mybatis.mapper-locations=classpath:mapper/*.xml

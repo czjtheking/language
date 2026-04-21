@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.steincker.dao.PermissionConfigLanguageMapper">
+  <resultMap id="BaseResultMap" type="com.steincker.entity.PermissionConfigLanguage">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="app" jdbcType="VARCHAR" property="app" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="lang" jdbcType="VARCHAR" property="lang" />
+    <result column="text" jdbcType="VARCHAR" property="text" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="deleted" jdbcType="BIGINT" property="deleted" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, app, type, code, lang, text, description, deleted, create_by, create_time, update_by, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from permission_config_language
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insert" parameterType="com.steincker.entity.PermissionConfigLanguage">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into permission_config_language (app, type, code,
+    lang, text, description,
+    deleted, create_by, create_time,
+    update_by, update_time)
+    values (#{app,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR},
+    #{lang,jdbcType=VARCHAR}, #{text,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+    #{deleted,jdbcType=BIGINT}, #{createBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+    #{updateBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.steincker.entity.PermissionConfigLanguage">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into permission_config_language
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="app != null">
+        app,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="lang != null">
+        lang,
+      </if>
+      <if test="text != null">
+        text,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="app != null">
+        #{app,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="lang != null">
+        #{lang,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIGINT},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from permission_config_language
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <update id="updateByExampleSelective" parameterType="map">
+    update permission_config_language
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.app != null">
+        app = #{record.app,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null">
+        code = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lang != null">
+        lang = #{record.lang,jdbcType=VARCHAR},
+      </if>
+      <if test="record.text != null">
+        text = #{record.text,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deleted != null">
+        deleted = #{record.deleted,jdbcType=BIGINT},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update permission_config_language
+    set id = #{record.id,jdbcType=BIGINT},
+      app = #{record.app,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=VARCHAR},
+      lang = #{record.lang,jdbcType=VARCHAR},
+      text = #{record.text,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      deleted = #{record.deleted,jdbcType=BIGINT},
+      create_by = #{record.createBy,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.steincker.entity.PermissionConfigLanguage">
+    update permission_config_language
+    <set>
+      <if test="app != null">
+        app = #{app,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="lang != null">
+        lang = #{lang,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        text = #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BIGINT},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.steincker.entity.PermissionConfigLanguage">
+    update permission_config_language
+    set app = #{app,jdbcType=VARCHAR},
+    type = #{type,jdbcType=VARCHAR},
+    code = #{code,jdbcType=VARCHAR},
+    lang = #{lang,jdbcType=VARCHAR},
+    text = #{text,jdbcType=VARCHAR},
+    description = #{description,jdbcType=VARCHAR},
+    deleted = #{deleted,jdbcType=BIGINT},
+    create_by = #{createBy,jdbcType=BIGINT},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    update_by = #{updateBy,jdbcType=BIGINT},
+    update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <!-- 先执行 SET 语句 -->
+  <update id="setGroupConcatMaxLen">
+    SET SESSION group_concat_max_len = 8192
+  </update>
+
+
+  <!-- 获取所有实体信息 已按照code type等分组 【默认不包括逻辑删除】 -->
+  <select id="findAllGroupBy" resultMap="BaseResultMap">
+    <!--SET SESSION group_concat_max_len = 8192;-->
+    SELECT
+    type,
+    code,
+    GROUP_CONCAT(DISTINCT lang ORDER BY lang SEPARATOR ',') AS lang,
+    GROUP_CONCAT(text ORDER BY lang SEPARATOR '|') AS text,
+    GROUP_CONCAT(description ORDER BY lang SEPARATOR '|') AS description
+    FROM
+    permission_config_language
+    WHERE
+    deleted = 0
+    GROUP BY
+    type, code
+    ORDER BY
+    type, code asc;
+  </select>
+</mapper>

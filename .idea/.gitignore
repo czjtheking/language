@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/

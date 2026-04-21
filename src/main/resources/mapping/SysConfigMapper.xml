@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.steincker.dao.SysConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.steincker.entity.SysConfig" >
+    <id column="variable" property="variable" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+    <result column="set_time" property="setTime" jdbcType="TIMESTAMP" />
+    <result column="set_by" property="setBy" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <!--将目标字段封装成Base_Column_Lis-->
+  <sql id="Base_Column_List" >
+    variable, value, set_time, set_by
+  </sql>
+
+  <!--根据variable查询目标字段-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_config
+    where variable = #{variable,jdbcType=VARCHAR}
+  </select>
+
+  <!--查询全部-->
+  <select id="selectSysConfigAll" resultType="com.steincker.entity.SysConfig" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_config
+
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_config
+    where variable = #{variable,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.steincker.entity.SysConfig" >
+    insert into sys_config (variable, value, set_time, 
+      set_by)
+    values (#{variable,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{setTime,jdbcType=TIMESTAMP}, 
+      #{setBy,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.steincker.entity.SysConfig" >
+    insert into sys_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="variable != null" >
+        variable,
+      </if>
+      <if test="value != null" >
+        value,
+      </if>
+      <if test="setTime != null" >
+        set_time,
+      </if>
+      <if test="setBy != null" >
+        set_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="variable != null" >
+        #{variable,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null" >
+        #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="setTime != null" >
+        #{setTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="setBy != null" >
+        #{setBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.steincker.entity.SysConfig" >
+    update sys_config
+    <set >
+      <if test="value != null" >
+        value = #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="setTime != null" >
+        set_time = #{setTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="setBy != null" >
+        set_by = #{setBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where variable = #{variable,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.steincker.entity.SysConfig" >
+    update sys_config
+    set value = #{value,jdbcType=VARCHAR},
+      set_time = #{setTime,jdbcType=TIMESTAMP},
+      set_by = #{setBy,jdbcType=VARCHAR}
+    where variable = #{variable,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,68 @@
+mybatis:
+  typeAliasesPackage: com.steincker.entity
+  mapperLocations: classpath:mapping/*.xml
+
+spring:
+#  datasource:
+#    url: jdbc:mysql://172.18.120.92:3306/sys
+#    username: root
+#    password: password
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  datasource:
+#    url: jdbc:mysql://172.18.120.92:9120/energy?useUnicode=true&serverTimezone=GMT%2b8&autoReconnect=true&failOverReadOnly=false&useSSL=false&allowMultiQueries=true
+#    username: root
+#    password: password
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  datasource:
+    dynamic:
+      enabled: true # 启用动态数据源，默认 true
+      primary: energy # 设置默认的数据源或者数据源组，默认值即为 energy
+      strict: false # 严格匹配数据源，默认false。true 未匹配到指定数据源时抛异常，false 使用默认数据源
+      grace-destroy: false # 是否优雅关闭数据源，默认为 false，设置为 true 时，关闭数据源时如果数据源中还存在活跃连接，至多等待 10s 后强制关闭
+      datasource:
+        energy:
+          url: jdbc:mysql://172.18.120.92:9120/energy?useUnicode=true&serverTimezone=GMT%2b8&autoReconnect=true&failOverReadOnly=false&useSSL=false
+          username: root
+          password: password
+          type: com.alibaba.druid.pool.DruidDataSource
+          druid:
+            initialSize: 8
+            minIdle: 8
+            maxActive: 64
+            maxWait: 60000
+            keepAlive: true
+            testWhileIdle: true
+            timeBetweenEvictionRunsMillis: 60000
+            minEvictableIdleTimeMillis: 300000
+            validationQuery: SELECT 1
+        permission:
+          url:  jdbc:mysql://172.18.120.92:9120/permission?useUnicode=true&serverTimezone=GMT%2b8&autoReconnect=true&failOverReadOnly=false&useSSL=false
+          username: root
+          password: password
+          type: com.alibaba.druid.pool.DruidDataSource
+          druid:
+            initialSize: 8
+            minIdle: 8
+            maxActive: 64
+            maxWait: 60000
+            keepAlive: true
+            testWhileIdle: true
+            timeBetweenEvictionRunsMillis: 60000
+            minEvictableIdleTimeMillis: 300000
+            validationQuery: SELECT 1
+        push:
+          url: jdbc:mysql://172.18.120.92:9120/push?useUnicode=true&serverTimezone=GMT%2b8&autoReconnect=true&failOverReadOnly=false&useSSL=false
+          username: root
+          password: password
+          type: com.alibaba.druid.pool.DruidDataSource
+          druid:
+            initialSize: 8
+            minIdle: 8
+            maxActive: 64
+            maxWait: 60000
+            keepAlive: true
+            testWhileIdle: true
+            timeBetweenEvictionRunsMillis: 60000
+            minEvictableIdleTimeMillis: 300000
+            validationQuery: SELECT 1

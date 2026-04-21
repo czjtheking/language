@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.steincker.dao.MenuInfoCommonMapper">
+  <resultMap id="BaseResultMap" type="com.steincker.entity.MenuInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="page" jdbcType="VARCHAR" property="page" />
+    <result column="perms" jdbcType="VARCHAR" property="perms" />
+    <result column="is_frame" jdbcType="BIT" property="isFrame" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="visible" jdbcType="BIT" property="visible" />
+    <result column="position_type" jdbcType="INTEGER" property="positionType" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+    <select id="findByIds" resultType="com.steincker.entity.MenuInfo">
+     select id,parent_id,name,type,page,perms,is_frame,icon, path, level,seq,position_type,visible,status from menu_info
+      where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </select>
+  <select id="findByIdsAndTypes" resultType="com.steincker.entity.MenuInfo">
+    select id,parent_id,name,type,page,perms,is_frame,icon, path, level,seq,position_type,visible,status from menu_info
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+    <if test="types!=null and types.size()>0">
+      and type in
+      <foreach close=")" collection="types" item="tp" open="(" separator=",">
+        #{tp}
+      </foreach>
+    </if>
+  </select>
+  <select id="findByParentId" resultType="com.steincker.entity.MenuInfo">
+    select id,parent_id,name,type,page,perms,is_frame,icon, path,position_type, level,seq,visible,status from menu_info
+    where parent_id = #{parentId} and type in
+    <foreach close=")" collection="types" item="tp" open="(" separator=",">
+      #{tp}
+    </foreach>
+  </select>
+    <select id="findAll" resultType="com.steincker.entity.MenuInfo">
+        select id,parent_id,name,type,page,perms,is_frame,icon, path, level,seq,position_type,visible,status from menu_info
+    </select>
+    <select id="searchAll" resultType="com.steincker.entity.MenuInfo">
+        select id,parent_id,name,type,page,perms,is_frame,icon, path, level,seq,position_type,visible,status from menu_info
+        where 1= 1
+        <if test="name != null and name != '' ">
+            and name like concat('%',REPLACE(#{name}, '%', '\\%'),'%')
+        </if>
+        <if test="type != null">
+            and type = #{type}
+        </if>
+        <if test="visible != null">
+            and visible = #{visible}
+        </if>
+    </select>
+    <select id="findSubChildren" resultType="com.steincker.entity.MenuInfo">
+        select id,parent_id,name,type,page,perms,is_frame,icon, path, level,seq,position_type,visible,status from menu_info
+        where parent_id = #{menuId}
+    </select>
+    <select id="checkSubChildrenExist" resultType="java.lang.Integer">
+        select count(*) from menu_info where parent_id = #{menuId}
+    </select>
+    <delete id="deleteMenuByIds">
+
+    </delete>
+</mapper>

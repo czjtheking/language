@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.steincker.dao.PushMessageDetailMapper">
+
+    <insert id="addDetailMessage">
+        INSERT INTO push_message_detail (parent_id,language,title,message,deleted) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.parentId}, #{item.language},#{item.title},#{item.message},#{item.deleted})
+        </foreach>
+    </insert>
+
+
+    <select id="selectByParentIdList" resultType="com.steincker.entity.PushMessageDetail">
+        select * from push_message_detail
+        <where>
+            and deleted = 0
+            <if test="parentIdList != null and parentIdList.size() != 0 ">
+                and parent_id IN
+                <foreach close=")" collection="parentIdList" item="listItem" open="(" separator=",">
+                    #{listItem}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <update id="updateBatch">
+        update `push_message_detail`
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix=" `parent_id` = case " suffix=" end, ">
+                <foreach collection="list" item="item">
+                    <if test="item.parentId != null">
+                        when `id` = #{item.id} then #{item.parentId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix=" `language` = case " suffix=" end, ">
+                <foreach collection="list" item="item">
+                    <if test="item.language != null">
+                        when `id` = #{item.id} then #{item.language}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix=" `title` = case " suffix=" end, ">
+                <foreach collection="list" item="item">
+                    <if test="item.title != null">
+                        when `id` = #{item.id} then #{item.title}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix=" `message` = case " suffix=" end, ">
+                <foreach collection="list" item="item">
+                    <if test="item.message != null">
+                        when `id` = #{item.id} then #{item.message}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix=" `deleted` = case " suffix=" end, ">
+                <foreach collection="list" item="item">
+                    <if test="item.deleted != null">
+                        when `id` = #{item.id} then #{item.deleted}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        `id` in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.id}
+        </foreach>
+    </update>
+    <update id="deleteByParentId">
+        update push_message_detail set deleted = #{id} where parent_id = #{parentId}
+    </update>
+
+    <update id="deleteByBatchParentId">
+        update push_message_detail set deleted = id where parent_id
+        in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+    <select id="selectByParentAndLanguage" resultType="com.steincker.entity.PushMessageDetail">
+        select * from push_message_detail
+        where
+        language = #{language}
+        and parent_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        and deleted = 0
+    </select>
+
+    <!-- 先执行 SET 语句 -->
+    <update id="setGroupConcatMaxLen">
+        SET SESSION group_concat_max_len = 8192
+    </update>
+
+    <!-- 获取所有实体信息 已按照code type等分组 【默认不包括逻辑删除】 -->
+    <select id="findAllGroupBy" resultType="com.steincker.entity.PushMessageDetail">
+        <!--SET SESSION group_concat_max_len = 8192;-->
+        SELECT
+        parent_id as parentId,
+        GROUP_CONCAT(DISTINCT `language` ORDER BY `language` SEPARATOR ',') AS `language`,
+        GROUP_CONCAT(title ORDER BY `language` SEPARATOR '|') AS title,
+        GROUP_CONCAT(message ORDER BY `language` SEPARATOR '|') AS message,
+        GROUP_CONCAT(app_title ORDER BY `language` SEPARATOR '|') AS appTitle,
+        GROUP_CONCAT(app_message ORDER BY `language` SEPARATOR '|') AS appMessage
+        FROM
+        push_message_detail
+        WHERE
+        deleted = 0 and parent_id  <![CDATA[ >=]]> 10100
+        GROUP BY
+        parent_id
+        ORDER BY
+        parent_id asc;
+    </select>
+
+</mapper>
